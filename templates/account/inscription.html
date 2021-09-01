@@ -1,0 +1,105 @@
+{% extends 'base/main.html' %}
+{% block contenu %}
+
+<div class="container">
+
+    <h1>Page d'inscription</h1>
+        <br>
+        <form method="POST" action="">
+            {% csrf_token %}
+
+            <div class="col-md-4">
+                <label>Nom d'utilisateur</label>
+                <ul><li>(Entre 3 et 20 caractères / Pas de caractère spécial)</li></ul>
+            </div>
+            <div class="col-md-8">
+                <input type="text" name="username" minlength="3" maxlength="20" pattern="[A-Za-z0-9]+" required>
+            </div><br><br>
+            <div class="col-md-4">
+                <label>Prénom</label>
+                <ul><li>(Entre 3 et 25 caractères / Pas de caractère spécial)</li></ul>
+            </div>
+            <div class="col-md-8">
+                <input type="text" name="first_name" pattern="[a-zA-Z\s]+" minlength="3" maxlength="25" required>
+            </div><br><br>
+            <div class="col-md-4">
+                <label>Nom</label>
+                <ul><li>(Entre 3 et 25 caractères / Pas de caractère spécial)</li></ul>
+            </div>
+            <div class="col-md-8">
+                <input type="text" name="last_name" pattern="[a-zA-Z\s]+" minlength="3" maxlength="25"  required>
+            </div><br><br>
+            <div class="col-md-4">
+                <label>Adresse électronique</label>
+            </div>
+            <div class="col-md-8">
+                <input type="email" name="email" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}" maxlength="40" required>
+            </div><br><br>
+            <div class="col-md-4">
+                <label>Lieu de résidence :</label>
+            </div>
+            <div class="col-md-8">
+                <select id="country" name="country" required>
+                <option value="" disabled selected>Choisir un pays</option>
+                <option value="Canada" >Canada</option>
+                <option value="USA" >Etats-Unis</option>
+                <option value="France" >France</option>
+            </select>
+            <select id="state" name="state" required>
+                <option value="" disabled selected>Choisir une province</option>
+            </select>
+            </div><br><br>
+            <div class="col-md-4">
+                <label>Mot de passe</label>
+                <ul><li>(Entre 6 et 20 caractères)</li></ul>
+            </div>
+            <div class="col-md-8">
+                <input type="password" id="pswd" name="password" minlength="6" maxlength="20" required>
+            </div><br><br>
+            <div class="col-md-4">
+                <label>Confirmation du mot de passe</label>
+            </div>
+            <div class="col-md-8">
+                <input type="password" id="pswd-confirm" name="password_confirm" minlength="6" maxlength="20" required>
+            </div><br><br>
+            {% if messages %}
+            {% for message in messages %}
+            <strong>{{ message }}</strong><br>
+            {% endfor %}
+            {% endif %}
+            <br>
+            <button type="submit" id="id_btn">
+                S'inscrire
+            </button>
+        </form>
+    <br>
+    <h4>Déjà inscrit ? <a style="text-decoration: underline" href="{% url 'login' %}">Cliquez ici pour vous connecter</a></h4>
+
+</div>
+
+<style>
+    button {
+        background-color: #000;
+        color: #fff;
+        font-family: 'Lato', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: .8px;
+        padding: 9px;
+        font-size: 11px;
+        line-height: 10px;
+    }
+    input:invalid {
+        border: 2px solid red
+    }
+    strong{
+        font-weight: bold;
+    }
+
+
+</style>
+
+{% load static %}
+<script src="{% static 'js/residence.js' %}"></script>
+<script src="{% static 'js/pswd_check.js' %}"></script>
+
+{% endblock %}

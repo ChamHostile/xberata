@@ -1,0 +1,58 @@
+{% extends 'base/main.html' %}
+{% block contenu %}
+{% load static %}
+
+<div class="main-content">
+    <div class="container">
+        <div class="col-md-8">
+            <div class="post-page-container">
+                <div class="page-image">
+                    <div class="owl-carousel post-slider">
+                        <div class="item slider-post">
+                            <div class="slider-image">
+                                <img src="{{ product.mainImg.url }}" alt="">
+                            </div>
+                        </div>
+                        {% for image in images %}
+                        {% if image %}
+                        <div class="item slider-post">
+                            <div class="slider-image">
+                                <img src="{{ image.url }}" alt="">
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+
+                </div>
+                <div class="page-title">
+                    <span class="category"><a href="#">empty now</a></span>
+                    <h1>{{ product.name }}</h1>
+                    <time class="post-date">{{ product.price }}$</time>
+                </div>
+                <div class="page-content">
+                    <p>
+                        {{ product.mainDesc|safe }}
+                    </p>
+                </div>
+            </div>
+            <br>
+            {% if request.user.is_authenticated %}
+            <span class="medium-button"><a href="{% url 'addToCart' product.id 1 %}">Ajouter au panier</a></span>
+            {% endif %}
+            <span class="medium-button"><a href="{% url 'home-shop' %}">Retourner à la boutique</a></span>
+            {% if admin %}
+            <span class="medium-button"><a href="{% url 'update-product' product.pk %}">Modifier le produit</a></span>
+            <span class="medium-button"><a href="{% url 'delete-product' product.id %}">Supprimer le produit</a></span>
+            {% endif %}
+
+        </div>
+        <div class="col-md-4">
+            {% if request.user.is_authenticated %}
+            <span class="medium-button"><a href="{% url 'cart-page' %}">Panier ({{ cartQty }})</a></span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

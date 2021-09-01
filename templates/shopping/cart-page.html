@@ -1,0 +1,115 @@
+{% extends 'base/main.html' %}
+{% block contenu %}
+
+<div class="main-content">
+    <div class="container">
+        <h1>Mon panier</h1><br>
+        {% if cart %}
+        <table>
+            <thead>
+            <tr>
+                <th>Produit(s)</th>
+                <th>Quantité</th>
+                <th>Prix</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            {% for cart_line in cart %}
+            <tr>
+                <td style="font-weight: bold">
+                    <a href="{% url 'product-detail' cart_line.product.id %}">
+                        <img src="{{ cart_line.product.mainImg.url }}" style="width: 150px">
+                        {{ cart_line.product.name }}
+                    </a>
+                </td>
+                <td style="text-align: center">
+                    <a style="margin-right: 40%" href="{% url 'remove-from-cart' cart_line.product.id %}">-</a>
+                    {{cart_line.quantity}}
+                    <a style="margin-left: 40%" href="{% url 'addToCart' cart_line.product.id 1 %}">+</a>
+                </td>
+                <td style="text-align: center">
+                    ${{ cart_line.product.price }}
+                </td>
+                <td style="text-align: center; font-weight: bold">
+                    <a href="{% url 'clear-cart-line' cart_line.id %}">Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+            <tfoot>
+            <tr>
+                <td style="font-size: 21px">
+                    Total (HT)
+                </td>
+                <td style="text-align: center">
+                    {{ qtyTotal }}  produit(s)
+                </td>
+                <td style="text-align: center">
+                    ${{ total_ht }}
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+                    Taxes
+                </td>
+                <td style="text-align: center">
+                    {{ taxe }}% ({{ client.state }})
+                </td>
+                <td style="text-align: center">
+                    ${{ tot_taxe|floatformat:'2' }}
+                </td>
+
+            </tr>
+            <tr>
+                <td style="font-size: 22px">
+                    Total (TTC)
+                </td>
+                <td style="text-align: center">
+                    {{ qtyTotal }}  produit(s)
+                </td>
+                <td style="text-align: center">
+                    ${{ total|floatformat:'2' }}
+                </td>
+                <td style="text-align: center;">
+                    <a href="{% url 'clear-cart' %}">Vider le panier</a>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+        <br>
+        <br>
+        <button><a style="color: white" href="{% url 'choose-address' %}">Choisir livraison</a></button>
+        <button><a style="color: white" href="{% url 'home-shop' %}">Retourner à la boutique</a></button>
+        {% else %}
+        <br>
+        <h3>Panier vide !</h3><br>
+        <p>Remplissez le en <a href="{% url 'home-shop' %}" style="font-weight: bold">retournant à la boutique</a> !</p>
+        {% endif %}
+    </div>
+</div>
+<style>
+    table, th, td {
+        border: 1.5px solid black;
+        padding: 1%;
+        border-collapse: collapse;
+
+    }
+    table {
+        width: 100%;
+    }
+    thead, tfoot{
+        font-weight: bold;
+        font-size: 19px;
+    }
+    button {
+        background-color: #000;
+        color: #fff;
+        font-family: 'Lato', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: .8px;
+        padding: 9px;
+        font-size: 11px;
+        line-height: 10px;
+    }
+</style>
+{% endblock %}

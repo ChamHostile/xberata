@@ -1,0 +1,91 @@
+{% extends 'base/main.html' %}
+{% block contenu %}
+<div class="main-content">
+    <div class="container">
+        {% if search %}
+        <h1>Liste des utilisateurs trouvés avec '{{ search }}'</h1><br>
+        <form method="POST" action="{% url 'user-list-search' %}">
+            {% csrf_token %}
+            <input type="text" placeholder="Chercher un utilisateur" name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+        <br>
+        {% if users %}
+        <table>
+            <thead>
+            <tr>
+                <th>Nom d'utilisateur</th>
+                <th>Nom / Prénom</th>
+                <th>Mail</th>
+                <th>Date d'inscription</th>
+                <th>Dernière connexion</th>
+                <th>Admin</th>
+            </tr>
+            </thead>
+            {% for user in users %}
+            <tr>
+                <td>
+                    <a href="{% url 'user-profile' user.id %}">{{ user }}</a>
+                </td>
+                <td>
+                    {{ user.last_name }} {{ user.first_name }}
+                </td>
+
+                <td>
+                    {{ user.email }}
+                </td>
+                <td>
+                    {{ user.date_joined }}
+                </td>
+                <td>
+                    {{ user.last_login }}
+                </td>
+                <td>
+                    {% for group in user.groups.all %}
+                    {% if group.name == 'admin' %}
+                    Oui
+                    {% endif %}
+                    {% empty %}
+                    Non
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <a href="{% url 'user-list' %}"><h2>Retourner à la liste des utilisateurs en cliquant ici</h2></a>
+        {% else %}
+        <h2>Aucun utilisateur trouvé !</h2>
+        <br>
+        <a href="{% url 'user-list' %}"><h4>Retourner à la liste des utilisateurs en cliquant ici</h4></a>
+        {% endif %}
+        {% else %}
+        <h1>Vous n'avez pas effectué de recherche... Vous pouvez réessayer ci-dessous</h1><br>
+        <form method="POST" action="{% url 'user-list-search' %}">
+            {% csrf_token %}
+            <input type="text" placeholder="Chercher un utilisateur" name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+        <br>
+        <a href="{% url 'user-list' %}"><h2>Retourner à la liste des utilisateurs en cliquant ici</h2></a>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    table, th, td {
+        border: 1.5px solid black;
+        padding: 1%;
+        border-collapse: collapse;
+        text-align: center
+    }
+    table {
+        width: 100%;
+    }
+    thead, tfoot{
+        font-weight: bold;
+        font-size: 17px;
+    }
+</style>
+
+{% endblock %}

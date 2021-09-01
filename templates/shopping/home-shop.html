@@ -1,0 +1,117 @@
+{% extends 'base/main.html' %}
+{% block contenu %}
+{% load static %}
+<div class="main-content">
+    <div class="container">
+        <div class="col-md-10">
+            <h1>Bienvenue dans la Boutique !</h1>
+        </div>
+        <div class="col-md-2">
+            {% if request.user.is_authenticated %}
+            <span class="large-button"><a href="{% url 'cart-page' %}">Panier ({{ cartQty }})</a></span>
+            {% endif %}
+        </div>
+        <br>
+        <!-- Filter Bar -->
+        <div class="col-md-8">
+            <div class="page">
+                <div class="widget">
+                    <form method="POST" action="{% url 'shop-search' %}">
+                        {% csrf_token %}
+                        <input type="text" placeholder="Chercher un produit" name="search">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <br><br>
+        <!-- End of Filter Bar -->
+        <div class="col-md-8">
+            <!-- Products -->
+            {% for product in products %}
+            <div class="col-md-6" style="width: 320px; height: 500px">
+                <div class="normal-posts">
+                    <div class="normal-post">
+                        <div class="normal-post-image" style="width: 100%; height: auto">
+                            {% if product.mainImg %}
+                            <a href="{% url 'product-detail' product.id %}"><img src="{{ product.mainImg.url }}" alt=""></a>
+                            {% endif %}
+                        </div>
+                        <div class="normal-post-title">
+                            <span class="category"><a href="#">{{ product.tag.nom }}</a></span>
+                            <h2><a href="{% url 'product-detail' product.id %}">{{ product.name }}</a></h2>
+                            <time class="post-date">${{ product.price }}</time>
+                        </div>
+                        <div class="normal-post-content">
+                            <p>
+                                {{ product.shortDesc }}
+                            </p>
+                        </div>
+                        <div class="normal-post-footer">
+                            <div class="read-more-button">
+                                {% if admin %}
+                                <span class="small-button"><a href="{% url 'delete-product' product.id %}">Delete product x</a></span>
+                                {% endif %}
+                                {% if request.user.is_authenticated %}
+                                <span class="small-button"><a href="{% url 'addToCart' product.id 1 %}">Add ></a></span>
+                                {% endif %}
+                                <span class="small-button"><a
+                                        href="{% url 'product-detail' product.id %}">See ></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <!-- End of Products -->
+        </div>
+        <!-- Side -->
+        <div class="col-md-4">
+            <div class="sidebar">
+                <div class="widget widget-about">
+                    <div class="widget-title">
+                        <h3>About</h3>
+                    </div>
+                    <div class="widget-content">
+                        <img src="{% static 'images/widget-about.jpg' %}" alt="">
+                        <p>Hello, my name is Jane Doe. Proin pelle augue consectetur. It's okey.</p>
+                        <span class="small-button"><a href="#">Read More ></a></span>
+                    </div>
+                </div>
+                <div class="widget widget-recent-posts">
+                    <div class="widget-title">
+                        <h3>Recent</h3>
+                    </div>
+                    <div class="widget-content">
+                        <ul class="recent-posts">
+                            <li class="recent-post clearfix">
+                                <a href="#"><img src="{% static 'images/widget-recent-post-1.jpg' %}" alt=""></a>
+                                <h6><a href="#">Product name</a></h6>
+                                <p>Short description of the product</p>
+                            </li>
+                            <li class="recent-post clearfix">
+                                <a href="#"><img src="{% static 'images/widget-recent-post-2.jpg' %}" alt=""></a>
+                                <h6><a href="#">Product name</a></h6>
+                                <p>Short description of the product</p>
+                            </li>
+                            <li class="recent-post clearfix">
+                                <a href="#"><img src="{% static 'images/widget-recent-post-3.jpg' %}" alt=""></a>
+                                <h6><a href="#">Product name</a></h6>
+                                <p>Short description of the product</p>
+                            </li>
+                            <li class="recent-post clearfix">
+                                <a href="#"><img src="{% static 'images/widget-recent-post-4.jpg' %}" alt=""></a>
+                                <h6><a href="#">Product name</a></h6>
+                                <p>Short description of the product</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Side -->
+    </div>
+</div>
+
+
+{% endblock %}
